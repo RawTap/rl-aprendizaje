@@ -10,6 +10,7 @@ def eje_x(numero):
     for i in range(numero):
         randomizar = round(random.uniform(0, 2 * pi), 2)
         lista_x.append(randomizar)
+    lista_x.sort()
     return lista_x
 
 
@@ -20,23 +21,39 @@ def eje_y(lista_x):
     return lista_y
 
 
-x = eje_x(50)
+def crear_ruido(numero, porcentaje=0.15):
+    lista_ruido = []
+    for i in numero:
+        ruido = random.uniform(-porcentaje * i, porcentaje * i)
+        lista_ruido.append(ruido)
+    return lista_ruido
+
+
+def agregar_ruido(eje_y, ruido):
+    y_ruidosa = []
+    for i in range(len(eje_y)):
+        y_ruidosa.append(eje_y[i] - ruido[i])
+    return y_ruidosa
+
+
+numero = 50
+x = eje_x(numero)
 y = eje_y(x)
 
-# Usar seaborn
+r = agregar_ruido(y, crear_ruido(y))
+
+# tema seaborn
 sns.set_theme(style="darkgrid")
 
-sns.scatterplot(x=x, y=y, color="crimson", s=70)
+# seno limpio
+sns.lineplot(x=x, y=y, color="blue", label="Seno limpio")
 
-plt.title("Gráfica de y = sin(x) con Seaborn", fontsize=14)
+# seno ruidoso
+sns.scatterplot(x=x, y=r, color="red", label="seno ruidoso")
+
+plt.title("Seno vs Seno ruidoso", fontsize=14)
 plt.xlabel("Eje X (Radianes)")
 plt.ylabel("Eje Y (Seno)")
+plt.legend()
 
 plt.show()
-# plt.scatter(x, y, color="green")
-# plt.title("Grafica de y = sin(x) en puntos aleatorios")
-# plt.xlabel("Eje x en radianes")
-# plt.ylabel("Eje Y")
-# plt.grid(True)
-
-# plt.show()
